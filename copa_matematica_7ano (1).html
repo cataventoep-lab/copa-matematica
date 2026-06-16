@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copa da Matemática – 7º Ano</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #1a7a2e;
+    --green-dark: #0f4d1c;
+    --green-light: #e8f5eb;
+    --gold: #f5c518;
+    --gold-dark: #c49b00;
+    --white: #ffffff;
+    --gray: #f4f4f0;
+    --text: #1a1a1a;
+    --text-muted: #555;
+    --blue: #0a2d6b;
+    --red: #c0392b;
+    --correct: #1a7a2e;
+    --wrong: #c0392b;
+    --border: #d0d0c8;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--green-dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── FIELD PATTERN BACKGROUND ─── */
+  .field-bg {
+    background: 
+      repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 40px,
+        transparent 40px, transparent 80px
+      ),
+      linear-gradient(180deg, #0f4d1c 0%, #1a7a2e 100%);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* ─── HERO / HEADER ─── */
+  .hero {
+    text-align: center;
+    padding: 32px 20px 24px;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--green-dark);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', 'Arial Black', sans-serif;
+    font-size: clamp(40px, 8vw, 72px);
+    color: var(--gold);
+    letter-spacing: 3px;
+    line-height: 1;
+    text-shadow: 0 4px 0 rgba(0,0,0,0.4);
+    margin-bottom: 8px;
+  }
+
+  .hero h2 {
+    font-family: 'Bebas Neue', 'Arial Black', sans-serif;
+    font-size: clamp(18px, 4vw, 28px);
+    color: white;
+    letter-spacing: 4px;
+    opacity: 0.9;
+    margin-bottom: 16px;
+  }
+
+  .hero-balls {
+    font-size: 28px;
+    letter-spacing: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* ─── SCORE BAR ─── */
+  .score-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.35);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 0;
+  }
+
+  .score-item {
+    text-align: center;
+  }
+
+  .score-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.6);
+    display: block;
+  }
+
+  .score-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .score-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* ─── NAV TABS ─── */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    padding: 16px 16px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px 10px 0 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.65);
+    border-bottom: 3px solid transparent;
+    letter-spacing: 0.3px;
+  }
+
+  .tab-btn.active {
+    background: white;
+    color: var(--green-dark);
+    border-bottom: 3px solid var(--gold);
+  }
+
+  .tab-btn:hover:not(.active) {
+    background: rgba(255,255,255,0.18);
+    color: white;
+  }
+
+  /* ─── CONTENT CARD ─── */
+  .content-card {
+    background: white;
+    margin: 0 16px 16px;
+    border-radius: 0 12px 12px 12px;
+    padding: 24px 20px;
+    min-height: 300px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--green-dark);
+    letter-spacing: 2px;
+    border-left: 4px solid var(--gold);
+    padding-left: 12px;
+    margin-bottom: 16px;
+  }
+
+  /* ─── REVIEW CARDS ─── */
+  .review-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  .review-card {
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .review-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+
+  .review-card.razao::before { background: #1a7a2e; }
+  .review-card.fracao::before { background: #0a2d6b; }
+  .review-card.decimal::before { background: #8B4513; }
+  .review-card.equacao::before { background: #7a1a1a; }
+  .review-card.sequencia::before { background: #5a1a7a; }
+  .review-card.comparar::before { background: #c49b00; }
+
+  .rc-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .rc-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .rc-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .rc-example {
+    margin-top: 10px;
+    background: var(--gray);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .highlight {
+    background: var(--gold);
+    color: var(--green-dark);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  /* ─── QUIZ ─── */
+  #quiz-section { display: none; }
+
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  .quiz-progress {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .progress-bar-wrap {
+    background: var(--gray);
+    border-radius: 20px;
+    height: 6px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--gold));
+    border-radius: 20px;
+    transition: width 0.4s ease;
+  }
+
+  .question-category {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    background: var(--green-light);
+    color: var(--green-dark);
+  }
+
+  .question-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .question-hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: -12px;
+    margin-bottom: 16px;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .opt-btn {
+    padding: 14px 12px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    text-align: center;
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+
+  .opt-btn.correct {
+    border-color: var(--correct);
+    background: #d4edda;
+    color: #155724;
+  }
+
+  .opt-btn.wrong {
+    border-color: var(--wrong);
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  .opt-btn:disabled { cursor: default; }
+
+  .feedback-box {
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .feedback-box.show { display: block; }
+  .feedback-box.correct { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+  .feedback-box.wrong { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+
+  .next-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--green-dark);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.15s;
+    display: none;
+  }
+
+  .next-btn.show { display: block; }
+  .next-btn:hover { background: var(--green); }
+
+  /* ─── START SCREEN ─── */
+  .start-screen {
+    text-align: center;
+    padding: 24px 0;
+  }
+
+  .start-screen .trophy {
+    font-size: 64px;
+    margin-bottom: 16px;
+    display: block;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  }
+
+  .start-screen h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--green-dark);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .start-screen p {
+    font-size: 14px;
+    color: var(--text-muted);
+    max-width: 380px;
+    margin: 0 auto 24px;
+    line-height: 1.6;
+  }
+
+  .topics-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .topic-tag {
+    background: var(--green-light);
+    color: var(--green-dark);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .start-btn {
+    display: inline-block;
+    padding: 16px 48px;
+    background: var(--gold);
+    color: var(--green-dark);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 4px 0 var(--gold-dark);
+  }
+
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--gold-dark); }
+  .start-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--gold-dark); }
+
+  /* ─── RESULTS ─── */
+  .results-screen {
+    text-align: center;
+    padding: 16px 0 8px;
+  }
+
+  .result-trophy {
+    font-size: 56px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .result-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--green-dark);
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+
+  .result-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--green-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  .score-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .score-small {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .medal-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .medal {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .medal.gold { background: #fff3cd; color: #856404; }
+  .medal.silver { background: #e2e3e5; color: #383d41; }
+  .medal.bronze { background: #ffecd1; color: #7a4200; }
+  .medal.try { background: #f8d7da; color: #721c24; }
+
+  .restart-btn {
+    padding: 13px 36px;
+    background: var(--gold);
+    color: var(--green-dark);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .restart-btn:hover { background: var(--gold-dark); color: white; }
+
+  .review-answers {
+    margin-top: 20px;
+    text-align: left;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .ra-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .ra-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .ra-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .ra-q { color: var(--text); font-weight: 500; }
+  .ra-a { color: var(--text-muted); }
+  .ra-correct { color: var(--correct); font-weight: 600; }
+
+  /* ─── MATH DISPLAY ─── */
+  .frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 600;
+    vertical-align: middle;
+    margin: 0 3px;
+    line-height: 1.2;
+  }
+  .frac span { display: block; padding: 0 3px; }
+  .frac .num { border-bottom: 2px solid currentColor; }
+
+  /* ─── FIELD ─── */
+  .mini-field {
+    background: #1a7a2e;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    color: white;
+    margin: 16px 0;
+    border: 2px solid rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mini-field::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 80px; height: 80px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+  }
+
+  .mini-field p { position: relative; z-index: 1; font-size: 14px; opacity: 0.85; }
+  .mini-field strong { font-size: 20px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-weight: 400; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 480px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .review-grid { grid-template-columns: 1fr; }
+    .content-card { padding: 18px 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="field-bg">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">⚽ 7º Ano · Matemática · 2º Bimestre</div>
+    <h1>COPA DA<br>MATEMÁTICA</h1>
+    <h2>Revisão Bimestral 2026</h2>
+    <div class="hero-balls">⚽ 🏆 ⚽</div>
+  </div>
+
+  <!-- SCORE BAR -->
+  <div class="score-bar">
+    <div class="score-item">
+      <span class="score-label">Gols</span>
+      <span class="score-value" id="bar-score">0</span>
+    </div>
+    <div class="score-divider"></div>
+    <div class="score-item">
+      <span class="score-label">Questões</span>
+      <span class="score-value" id="bar-total">—</span>
+    </div>
+    <div class="score-divider"></div>
+    <div class="score-item">
+      <span class="score-label">Precisão</span>
+      <span class="score-value" id="bar-pct">—</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('revisao')">📚 Revisão</button>
+    <button class="tab-btn" onclick="showTab('quiz')">⚽ Quiz</button>
+  </div>
+
+  <!-- REVISÃO -->
+  <div class="content-card" id="revisao-section">
+    <div class="section-title">CONTEÚDOS DA PROVA</div>
+
+    <div class="review-grid">
+
+      <div class="review-card razao">
+        <div class="rc-icon">⚽</div>
+        <div class="rc-title">Razão</div>
+        <div class="rc-body">
+          A razão é uma comparação entre duas grandezas por meio de divisão.
+          Se há 12 meninos e 20 meninas numa sala, a razão de meninos para meninas é:
+        </div>
+        <div class="rc-example">
+          <span class="highlight">12 para 20</span> → 
+          <span class="frac"><span class="num">12</span><span>20</span></span> =
+          <span class="frac"><span class="num">3</span><span>5</span></span>
+          <br>
+          📌 Sempre simplifique até ficar irredutível!
+        </div>
+      </div>
+
+      <div class="review-card fracao">
+        <div class="rc-icon">🥤</div>
+        <div class="rc-title">Razão e Proporção</div>
+        <div class="rc-body">
+          Um recipiente tem suco e água na razão 2:5. Se há 4 litros de suco, quantos litros de água há?
+        </div>
+        <div class="rc-example">
+          Razão: <span class="highlight">2/5 = 4/x</span><br>
+          2 · x = 5 · 4<br>
+          2x = 20<br>
+          x = <span class="highlight">10 litros de água</span>
+        </div>
+      </div>
+
+      <div class="review-card comparar">
+        <div class="rc-icon">⚖️</div>
+        <div class="rc-title">Comparação de Frações</div>
+        <div class="rc-body">
+          Para comparar frações, iguale os denominadores ou converta para decimal:
+        </div>
+        <div class="rc-example">
+          Compare
+          <span class="frac"><span class="num">3</span><span>4</span></span>
+          e
+          <span class="frac"><span class="num">4</span><span>5</span></span>
+          <br>
+          <span class="frac"><span class="num">3</span><span>4</span></span> = 0,75 &nbsp;&nbsp;
+          <span class="frac"><span class="num">4</span><span>5</span></span> = 0,80<br>
+          0,75 < 0,80 → 
+          <span class="highlight">3/4 < 4/5</span>
+        </div>
+      </div>
+
+      <div class="review-card decimal">
+        <div class="rc-icon">🔢</div>
+        <div class="rc-title">Fração em Decimal</div>
+        <div class="rc-body">
+          Divida o numerador pelo denominador usando divisão longa (chave):
+        </div>
+        <div class="rc-example">
+          <span class="frac"><span class="num">28</span><span>12</span></span> = 28 ÷ 12<br>
+          28 = 12 × 2 → sobra 4<br>
+          40 = 12 × 3 → sobra 4 (repete)<br>
+          = <span class="highlight">2,333... = 2,3̄</span>
+        </div>
+      </div>
+
+      <div class="review-card equacao">
+        <div class="rc-icon">🧮</div>
+        <div class="rc-title">Calcular o valor de x</div>
+        <div class="rc-body">
+          Isole o x passando os termos para o outro lado da igualdade (mudando o sinal):
+        </div>
+        <div class="rc-example">
+          3x + 2 = 22 – 2x<br>
+          3x + 2x = 22 – 2<br>
+          5x = 20<br>
+          x = 20 ÷ 5 = <span class="highlight">x = 4</span>
+        </div>
+      </div>
+
+      <div class="review-card sequencia">
+        <div class="rc-icon">🔗</div>
+        <div class="rc-title">Sequências com Expressões</div>
+        <div class="rc-body">
+          Encontre o padrão e use a expressão geradora para qualquer termo:
+        </div>
+        <div class="rc-example">
+          Sequência: 3, 6, 9, 12, ...<br>
+          Expressão: <span class="highlight">aₙ = 3 · n</span><br>
+          n=5: a₅ = 3 · 5 = <span class="highlight">15</span><br>
+          Aumento: +3 por termo
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mini-field" style="margin-top:24px">
+      <p>Está pronto para entrar em campo?</p>
+      <strong>VAMOS AO QUIZ! ⚽</strong>
+      <p style="margin-top:8px; font-size:13px">Clique na aba "Quiz" acima</p>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="content-card" id="quiz-section">
+
+    <!-- START SCREEN -->
+    <div id="start-screen" class="start-screen">
+      <span class="trophy">🏆</span>
+      <h3>HORA DO JOGO!</h3>
+      <p>Responda 12 questões sobre os conteúdos do 2º Bimestre e mostre que você merece levantar a taça!</p>
+      <div class="topics-list">
+        <span class="topic-tag">⚽ Razão</span>
+        <span class="topic-tag">⚖️ Comparação de Frações</span>
+        <span class="topic-tag">🔢 Fração → Decimal</span>
+        <span class="topic-tag">🧮 Equações</span>
+        <span class="topic-tag">🔗 Sequências</span>
+        <span class="topic-tag">🥤 Proporção</span>
+      </div>
+      <button class="start-btn" onclick="startQuiz()">⚽ INICIAR JOGO</button>
+    </div>
+
+    <!-- QUESTION SCREEN -->
+    <div id="question-screen" style="display:none">
+      <div class="quiz-header">
+        <span class="quiz-progress" id="q-progress">Questão 1 de 12</span>
+        <span style="font-size:13px; color:var(--text-muted);" id="q-score-inline">0 gols</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="question-category" id="q-category">Razão</div>
+      <div class="question-text" id="q-text">...</div>
+      <div class="question-hint" id="q-hint" style="display:none"></div>
+      <div class="options-grid" id="options-grid"></div>
+      <div class="feedback-box" id="feedback-box"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Próxima questão →</button>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div id="results-screen" style="display:none" class="results-screen">
+      <span class="result-trophy" id="result-trophy">🏆</span>
+      <div class="result-title" id="result-title">CAMPEÃO!</div>
+      <div class="result-subtitle" id="result-subtitle">Você mandou muito bem!</div>
+      <div class="score-circle">
+        <span class="score-big" id="result-score">0</span>
+        <span class="score-small">de 12 gols</span>
+      </div>
+      <div class="medal-row" id="medal-row"></div>
+      <button class="restart-btn" onclick="restartQuiz()">🔄 JOGAR NOVAMENTE</button>
+      <div class="review-answers" id="review-answers">
+        <div class="ra-title">Revisão das questões</div>
+        <div id="ra-list"></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    category: "⚽ Razão",
+    text: "Em um time de futebol há 3 atacantes e 5 defensores. Qual é a razão de atacantes para defensores?",
+    options: ["3/5", "5/3", "3/8", "5/8"],
+    answer: 0,
+    feedback: "Correto! A razão é atacantes/defensores = 3/5. Sempre coloque o primeiro grupo no numerador e o segundo no denominador.",
+    wrongFeedback: "A razão de atacantes PARA defensores é 3/5 (atacantes no numerador, defensores no denominador)."
+  },
+  {
+    category: "🥤 Proporção",
+    text: "Um recipiente tem suco e água na razão 2 para 5. Se há 6 litros de suco, quantos litros de água há?",
+    options: ["12 litros", "15 litros", "10 litros", "18 litros"],
+    answer: 1,
+    feedback: "Perfeito! 2/5 = 6/x → 2x = 30 → x = 15 litros de água.",
+    wrongFeedback: "Use proporção: 2/5 = 6/x. Então 2·x = 5·6 → 2x = 30 → x = 15 litros."
+  },
+  {
+    category: "🏟️ Sala de Aula",
+    text: "Em uma sala há 12 meninos e 20 meninas. Qual é a razão de meninos para meninas na forma irredutível?",
+    options: ["12/20", "6/10", "3/5", "2/4"],
+    answer: 2,
+    feedback: "Isso aí! 12/20 → dividindo por 4 → 3/5. Sempre simplifique até a fração ser irredutível!",
+    wrongFeedback: "12/20 ÷ 4 = 3/5. A fração irredutível é 3/5, pois 3 e 5 não têm divisor comum além do 1."
+  },
+  {
+    category: "⚖️ Comparação de Frações",
+    text: "Compare as frações 3/4 e 4/5. Qual símbolo é correto?",
+    hint: "Dica: converta para decimal ou iguale o denominador.",
+    options: ["3/4 > 4/5", "3/4 = 4/5", "3/4 < 4/5", "Impossível comparar"],
+    answer: 2,
+    feedback: "Certo! 3/4 = 0,75 e 4/5 = 0,80. Como 0,75 < 0,80, temos 3/4 < 4/5.",
+    wrongFeedback: "3/4 = 0,75 e 4/5 = 0,80. Como 0,75 é menor que 0,80, o sinal correto é 3/4 < 4/5."
+  },
+  {
+    category: "⚖️ Comparação de Frações",
+    text: "Qual fração é MAIOR: 5/6 ou 7/9?",
+    hint: "Dica: transforme em decimal dividindo o numerador pelo denominador.",
+    options: ["5/6", "7/9", "São iguais", "Não é possível saber"],
+    answer: 0,
+    feedback: "Ótimo! 5/6 ≈ 0,833 e 7/9 ≈ 0,777. Como 0,833 > 0,777, então 5/6 > 7/9.",
+    wrongFeedback: "5/6 ≈ 0,833 e 7/9 ≈ 0,777. Portanto 5/6 é MAIOR que 7/9."
+  },
+  {
+    category: "🔢 Fração em Decimal",
+    text: "Escreva a fração 28/12 em número decimal (arredonde a 3 casas):",
+    options: ["2,333...", "1,428...", "3,5", "0,428..."],
+    answer: 0,
+    feedback: "Perfeito! 28 ÷ 12 = 2,333... (dízima periódica). O período é o 3.",
+    wrongFeedback: "28 ÷ 12: 12 × 2 = 24, sobra 4. 40 ÷ 12 = 3, sobra 4. Repete: 2,333..."
+  },
+  {
+    category: "🔢 Fração em Decimal",
+    text: "Qual é o valor decimal de 3/4?",
+    options: ["0,34", "0,75", "1,33", "0,43"],
+    answer: 1,
+    feedback: "Correto! 3 ÷ 4 = 0,75. Você pode pensar: 3/4 = 75/100 = 0,75.",
+    wrongFeedback: "3 ÷ 4 = 0,75. Dica: 4 × 0,75 = 3. Ou pense: 1/4 = 0,25, então 3/4 = 0,75."
+  },
+  {
+    category: "🧮 Equação com x",
+    text: "Calcule o valor de x: 3x + 2 = 22 – 2x",
+    options: ["x = 3", "x = 4", "x = 5", "x = 6"],
+    answer: 1,
+    feedback: "Muito bem! 3x + 2x = 22 – 2 → 5x = 20 → x = 4. ✔",
+    wrongFeedback: "Passe os x para o mesmo lado: 3x + 2x = 22 – 2 → 5x = 20 → x = 20/5 = 4."
+  },
+  {
+    category: "🧮 Equação com x",
+    text: "Na balança: 3x + 7 = 2x + 8. Qual é o valor de x?",
+    options: ["x = 0", "x = 1", "x = 3", "x = 5"],
+    answer: 1,
+    feedback: "Correto! 3x – 2x = 8 – 7 → x = 1. A balança fica equilibrada com x = 1.",
+    wrongFeedback: "Isole o x: 3x – 2x = 8 – 7 → 1x = 1 → x = 1."
+  },
+  {
+    category: "🧮 Equação com x",
+    text: "Resolva: x + 5 = 12",
+    options: ["x = 17", "x = 7", "x = 5", "x = 60"],
+    answer: 1,
+    feedback: "Isso! x = 12 – 5 = 7. Sempre passe o número pro outro lado mudando o sinal.",
+    wrongFeedback: "x + 5 = 12 → x = 12 – 5 → x = 7."
+  },
+  {
+    category: "🔗 Sequências",
+    text: "Observe a sequência: 5, 10, 15, 20, 25... Qual é a expressão geradora?",
+    options: ["aₙ = n + 5", "aₙ = 5 · n", "aₙ = 5 + n²", "aₙ = 2n + 3"],
+    answer: 1,
+    feedback: "Excelente! Cada termo é 5 vezes a posição: a₁=5, a₂=10, a₃=15... Expressão: aₙ = 5·n",
+    wrongFeedback: "O padrão é multiplicar por 5: termo = 5 × posição. Expressão: aₙ = 5·n"
+  },
+  {
+    category: "🔗 Sequências",
+    text: "A expressão geradora de uma sequência é aₙ = 3n + 1. Qual é o 5º termo?",
+    options: ["14", "16", "15", "13"],
+    answer: 1,
+    feedback: "Perfeito! a₅ = 3·5 + 1 = 15 + 1 = 16. Basta substituir n = 5.",
+    wrongFeedback: "Substitua n=5: a₅ = 3·5 + 1 = 15 + 1 = 16."
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let userAnswers = [];
+let answered = false;
+let quizStarted = false;
+
+function showTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('revisao-section').style.display = tab === 'revisao' ? 'block' : 'none';
+  document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
+}
+
+function startQuiz() {
+  currentQ = 0;
+  score = 0;
+  userAnswers = [];
+  answered = false;
+  quizStarted = true;
+  updateScoreBar();
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('question-screen').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = questions[currentQ];
+  document.getElementById('q-progress').textContent = `Questão ${currentQ + 1} de ${questions.length}`;
+  document.getElementById('q-score-inline').textContent = `${score} gol${score !== 1 ? 's' : ''}`;
+  document.getElementById('progress-fill').style.width = `${(currentQ / questions.length) * 100}%`;
+  document.getElementById('q-category').textContent = q.category;
+  document.getElementById('q-text').innerHTML = q.text;
+
+  const hintEl = document.getElementById('q-hint');
+  if (q.hint) {
+    hintEl.textContent = q.hint;
+    hintEl.style.display = 'block';
+  } else {
+    hintEl.style.display = 'none';
+  }
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = opt;
+    btn.onclick = () => selectAnswer(i);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('feedback-box').className = 'feedback-box';
+  document.getElementById('feedback-box').textContent = '';
+  document.getElementById('next-btn').className = 'next-btn';
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[currentQ];
+  const btns = document.querySelectorAll('.opt-btn');
+  const isCorrect = idx === q.answer;
+
+  btns.forEach(b => b.disabled = true);
+  btns[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) btns[q.answer].classList.add('correct');
+
+  const fb = document.getElementById('feedback-box');
+  if (isCorrect) {
+    score++;
+    fb.textContent = '⚽ GOL! ' + q.feedback;
+    fb.className = 'feedback-box correct show';
+  } else {
+    fb.textContent = '❌ Quase! ' + q.wrongFeedback;
+    fb.className = 'feedback-box wrong show';
+  }
+
+  userAnswers.push({ q: q.text, correct: isCorrect, answer: q.options[q.answer] });
+  updateScoreBar();
+  document.getElementById('next-btn').className = 'next-btn show';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('question-screen').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('progress-fill').style.width = '100%';
+
+  const pct = Math.round((score / questions.length) * 100);
+  document.getElementById('result-score').textContent = score;
+
+  let trophy, title, subtitle, medal;
+  if (score >= 11) {
+    trophy = '🏆'; title = 'CAMPEÃO MUNDIAL!'; subtitle = `${pct}% de acerto — Você é o craque da turma!`;
+    medal = '<span class="medal gold">🥇 Medalha de Ouro</span>';
+  } else if (score >= 9) {
+    trophy = '🥈'; title = 'VICE-CAMPEÃO!'; subtitle = `${pct}% de acerto — Muito bom, mais um treino e sobe!`;
+    medal = '<span class="medal silver">🥈 Medalha de Prata</span>';
+  } else if (score >= 7) {
+    trophy = '🥉'; title = 'TERCEIRO LUGAR!'; subtitle = `${pct}% de acerto — Boa performance, continue!`;
+    medal = '<span class="medal bronze">🥉 Medalha de Bronze</span>';
+  } else {
+    trophy = '⚽'; title = 'PRÓXIMA VEZ!'; subtitle = `${pct}% de acerto — Revise o conteúdo e tente de novo!`;
+    medal = '<span class="medal try">📚 Continue Treinando</span>';
+  }
+
+  document.getElementById('result-trophy').textContent = trophy;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-subtitle').textContent = subtitle;
+  document.getElementById('medal-row').innerHTML = medal;
+
+  const raList = document.getElementById('ra-list');
+  raList.innerHTML = '';
+  userAnswers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'ra-item';
+    div.innerHTML = `<span class="ra-icon">${a.correct ? '✅' : '❌'}</span>
+      <div><div class="ra-q">Q${i+1}: ${a.q.substring(0,60)}${a.q.length>60?'...':''}</div>
+      <div class="ra-a">Resposta: <span class="ra-correct">${a.answer}</span></div></div>`;
+    raList.appendChild(div);
+  });
+
+  updateScoreBar();
+}
+
+function restartQuiz() {
+  startQuiz();
+}
+
+function updateScoreBar() {
+  document.getElementById('bar-score').textContent = score;
+  if (quizStarted) {
+    document.getElementById('bar-total').textContent = `${Math.min(currentQ + (answered ? 1 : 0), questions.length)}/${questions.length}`;
+    const answered_count = userAnswers.length;
+    document.getElementById('bar-pct').textContent = answered_count > 0 ? Math.round((score / answered_count) * 100) + '%' : '—';
+  }
+}
+
+document.getElementById('quiz-section').style.display = 'none';
+</script>
+</body>
+</html>
